@@ -13,6 +13,23 @@ import static org.junit.Assert.assertEquals;
 public class PacketSerializerTest {
     public static final int MESSAGE_POSITION = 16;
 
+    private byte[] cipherMessageObject(MessageObject messageObject){
+        try {
+
+            CipherString cipherString = new CipherString();
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            String jsonMessage = objectMapper.writeValueAsString(messageObject);
+
+            return cipherString.encrypt(jsonMessage);
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
     @Test
     public void serializesMessageIds(){
         int expectedCommand = 60;
@@ -56,9 +73,13 @@ public class PacketSerializerTest {
     }
     @Test
     public void addsMessageLengthToPacket(){
+
         MessageObject messageObject = new MessageObject("expected");
+
         message message = new message(0,0, messageObject);
+
         byte[] encryptedMessage = cipherMessageObject(messageObject);
+
         int expectedMessageLength = encryptedMessage.length + Integer.BYTES * 2;
 
         PacketSerializer packetSerializer = new PacketSerializer(message, (byte) 0);
@@ -69,15 +90,5 @@ public class PacketSerializerTest {
         assertEquals(expectedMessageLength, actualLength);
     }
 
-    private byte[] cipherMessageObject(MessageObject messageObject){
-        try {
-            CipherString cipherString = new CipherString();
-            ObjectMapper objectMapper = new ObjectMapper();
-            String jsonMessage = objectMapper.writeValueAsString(messageObject);
-            return cipherString.encrypt(jsonMessage);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 }

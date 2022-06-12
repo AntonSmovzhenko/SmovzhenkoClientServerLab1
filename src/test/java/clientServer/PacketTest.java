@@ -18,6 +18,13 @@ public class PacketTest {
     private static final int DEFAULT_LENGTH = 120;
     private ByteBuffer byteBuffer;
 
+    private byte[] createByteArrayWithRightCrc16(byte srcId, long packetId, message message) {
+
+        PacketSerializer packetSerializer = new PacketSerializer(message, srcId, packetId);
+
+        return packetSerializer.getPacket();
+    }
+
     @Before
     public void setBuffer(){
         byteBuffer = ByteBuffer.allocate(DEFAULT_LENGTH);
@@ -95,11 +102,4 @@ public class PacketTest {
         assertEquals(expectedMessageObject.getMessage(), packet.getMessage().getMessageObject().getMessage());
     }
 
-
-    private byte[] createByteArrayWithRightCrc16(byte srcId, long packetId, message message) {
-
-        PacketSerializer packetSerializer = new PacketSerializer(message, srcId, packetId);
-
-        return packetSerializer.getPacket();
-    }
 }

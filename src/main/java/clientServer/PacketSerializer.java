@@ -18,8 +18,10 @@ public class PacketSerializer {
         byte[] encrypted;
 
         try {
+
             CipherString cipherString = new CipherString();
             ObjectMapper objectMapper = new ObjectMapper();
+
             String jsonMessage = objectMapper.writeValueAsString(message.getMessageObject());
             encrypted = cipherString.encrypt(jsonMessage);
 
@@ -30,26 +32,27 @@ public class PacketSerializer {
         //packet start serialization
         int messageLength = Integer.BYTES * 2 +  encrypted.length;
         int packetLength = PACKET_START_LENGTH + Short.BYTES + messageLength;
+
         ByteBuffer byteBuffer = ByteBuffer.allocate(packetLength);
         byteBuffer.put(Packet.bMagic);
         byteBuffer.put(srcId);
         byteBuffer.putLong(packetId);
         byteBuffer.putInt(messageLength);
 
-        //crc16 creation
         Crc16Checker crc16Checker = new Crc16Checker();
+
         byte[] packetStart = Arrays.copyOf(byteBuffer.array(), byteBuffer.position());
         short packetCrc16 = crc16Checker.createCrc16(packetStart);
         byteBuffer.putShort(packetCrc16);
 
-        //message serialization
         ByteBuffer messageByteBuffer = ByteBuffer.allocate(messageLength);
+
         messageByteBuffer.putInt(message.getCommandType());
         messageByteBuffer.putInt(message.getUserId());
         messageByteBuffer.put(encrypted);
+
         byteBuffer.put(messageByteBuffer.array());
 
-        //message crc16
         short messageCrc16 = crc16Checker.createCrc16(messageByteBuffer.array());
         byteBuffer.putShort(messageCrc16);
 
@@ -59,7 +62,6 @@ public class PacketSerializer {
     public PacketSerializer(message message, byte srcId) {
         this(message, srcId, packetId++);
     }
-
 
     public static long getPacketId() {
         return packetId;

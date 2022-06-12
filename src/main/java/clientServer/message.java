@@ -1,18 +1,14 @@
 package clientServer;
 
 import clientServer.cipher.CipherString;
+
 import clientServer.exception.IllegalPacketException;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.nio.ByteBuffer;
 
 public class message {
-
-    private int commandType = 0;
-
-    private int userId = 0;
-
-    private MessageObject messageObject;
 
     public message(ByteBuffer byteBuffer, int length) {
 
@@ -60,4 +56,10 @@ public class message {
     public MessageObject getMessageObject() {
         return messageObject;
     }
+
+    private int commandType = 0;
+
+    private int userId = 0;
+
+    private MessageObject messageObject;
 }

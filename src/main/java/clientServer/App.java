@@ -1,7 +1,6 @@
 package clientServer;
 
-import java.security.NoSuchAlgorithmException;
-
+// Anton Smovzhenko
 public class App
 {
     public static void main(String[] args) {

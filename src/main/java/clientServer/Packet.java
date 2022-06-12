@@ -17,6 +17,16 @@ public class Packet {
     private short messageCrc16;
     private Crc16Checker crc16Checker = new Crc16Checker();
 
+    public long getPacketId() {
+        return packetId;
+    }
+    public byte getSrcId() {
+        return srcId;
+    }
+    public clientServer.message getMessage() {
+        return message;
+    }
+
     public Packet(byte[] bytePacket) {
         ByteBuffer byteBuffer = ByteBuffer.wrap(bytePacket);
         byte magic = byteBuffer.get();
@@ -42,14 +52,6 @@ public class Packet {
             throw new IllegalPacketException("Packet is damaged");
         }
     }
-    public long getPacketId() {
-        return packetId;
-    }
-    public byte getSrcId() {
-        return srcId;
-    }
-    public clientServer.message getMessage() {
-        return message;
-    }
+
 
 }

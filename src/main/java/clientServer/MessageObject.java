@@ -1,8 +1,5 @@
 package clientServer;
 
-/**
- * This is example POJO object
- */
 public class MessageObject {
     private String message;
 
